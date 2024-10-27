@@ -43,7 +43,7 @@ public class Variable extends Expression{
     @Override
     public Expression calculation(String name, double num) {
         if (this.name.equals( name)){
-            this.name = String.valueOf(num);
+            return new Num(num);
         }
         return this;
     }
