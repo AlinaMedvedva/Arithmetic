@@ -18,12 +18,12 @@ public class Variable extends Expression{
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Variable(name);
+        return this;
     }
 
     @Override
     public Expression derivative(String name) {
-        if(this.name==name)
+        if(this.name.equals(name))
             return new Num(1);
         return new Num(0);
     }
@@ -42,7 +42,7 @@ public class Variable extends Expression{
 
     @Override
     public Expression calculation(String name, double num) {
-        if (this.name == name){
+        if (this.name.equals( name)){
             this.name = String.valueOf(num);
         }
         return this;
