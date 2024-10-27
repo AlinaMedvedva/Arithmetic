@@ -1,20 +1,25 @@
 package arithmetic;
 
+import java.util.HashSet;
+
 public class Num extends Expression{
     private double num;
 
     public Num(double num) {
+
         this.num = num;
     }
 
     @Override
     public String toString() {
+        if(num == 0.0)
+            return "0";
         return String.valueOf(num);
     }
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Num(num);
+        return this;
     }
 
     @Override
@@ -23,7 +28,12 @@ public class Num extends Expression{
     }
 
     @Override
-    public double calculation(double num) throws MyException {
+    public HashSet<Variable> count_variable() {
+        return null;
+    }
+
+    @Override
+    public double calculation(double num){
         return this.num;
     }
 
