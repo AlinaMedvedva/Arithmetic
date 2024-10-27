@@ -12,12 +12,31 @@ public class Sum extends Expression{
 
     @Override
     public String toString() {
+        String sum1_toString = sum1.toString();
+        String sum2_toString = sum2.toString();
+        boolean flag1, flag2;
+        flag1 = this.isDouble(sum1_toString);
+        flag2 = this.isDouble(sum2_toString);
+        if(flag1 && flag2){
+            return String.valueOf(Double.parseDouble(sum1_toString) + Double.parseDouble(sum2_toString));
+        }
+        if(flag1)
+        {
+            double s1 = Double.parseDouble(sum1_toString);
+            if(s1 == 0.0)
+                return sum2_toString;
+        }
+        if(flag2){
+            double s2 = Double.parseDouble(sum2_toString);
+            if(s2 == 0)
+                return sum1_toString;
+        }
         return sum1.toString() + " + " + sum2.toString();
     }
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Sum(sum1, sum2);
+        return this;
     }
 
     @Override
@@ -48,12 +67,8 @@ public class Sum extends Expression{
     }
 
     @Override
-    public double calculation(double num) throws MyException{
-        HashSet<Variable> v = count_variable();
-        if(v.size() > 1){
-            throw new MyException("Больше, чем одна переменная");
-        }
-        else return sum1.calculation(num) + sum2.calculation(num);
+    public double calculation(double num){
+        return sum1.calculation(num) + sum2.calculation(num);
     }
 
     @Override
