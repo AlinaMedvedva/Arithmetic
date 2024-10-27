@@ -13,20 +13,26 @@ public class Pow extends Expression{
 
     @Override
     public String toString() {
-        if((num instanceof Num || num instanceof Variable) && !((pow instanceof Num)||(pow instanceof Variable))){
-            return num.toString() + "^(" + pow.toString() + ")";
+        String num_toString = num.toString();
+        String pow_toString = pow.toString();
+        boolean flag1, flag2;
+        flag1 = this.isDouble(num_toString);
+        flag2 = this.isDouble(pow_toString);
+        if(flag2){
+            double p =Double.parseDouble(pow_toString);
+            if(p==0) return "1";
+            if(flag1){
+                double n = Double.parseDouble(num_toString);
+                return String.valueOf(Math.pow(n, p));
+            }
+            return "(" + num_toString + ")^" + p;
         }
-        if((pow instanceof Num || pow instanceof Variable) && !((num instanceof Num)||(num instanceof Variable))){
-            return "(" + num.toString() + ")^" + pow.toString();
-        }
-        if((num instanceof Num || num instanceof Variable) && ((pow instanceof Num)||(pow instanceof Variable)))
-            return num.toString() + "^" + pow.toString();
-        return "("+num.toString()+")^("+pow.toString()+")";
+        return "(" + num_toString + ")^(" + pow_toString + ")";
     }
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Pow(num, pow);
+        return this;
     }
 
     @Override
@@ -57,12 +63,8 @@ public class Pow extends Expression{
     }
 
     @Override
-    public double calculation(double num) throws MyException {
-        HashSet<Variable> v = count_variable();
-        if(v.size() > 1){
-            throw new MyException("Больше, чем одна переменная");
-        }
-        else return Math.pow( this.num.calculation(num),  pow.calculation(num));
+    public double calculation(double num) {
+        return Math.pow( this.num.calculation(num),  pow.calculation(num));
     }
 
     @Override
