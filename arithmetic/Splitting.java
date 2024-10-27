@@ -13,20 +13,27 @@ public class Splitting extends Expression{
 
     @Override
     public String toString() {
-        if((split1 instanceof Num || split1 instanceof Variable) && !((split2 instanceof Num)||(split2 instanceof Variable))){
-            return split1.toString() + "/(" + split2.toString() + ")";
+        String split1_toString = split1.toString();
+        String split2_toString = split2.toString();
+        boolean flag1, flag2;
+        flag1 = this.isDouble(split1_toString);
+        flag2 = this.isDouble(split2_toString);
+        if(flag1){
+            double s1 = Double.parseDouble(split1_toString);
+            if(s1 == 0.0)
+                return "0";
+            if(flag2){
+                double s2 = Double.parseDouble(split2_toString);
+                return String.valueOf(s1/s2);
+            }
+            return s1 + "/(" + split2_toString + ")";
         }
-        if((split2 instanceof Num || split2 instanceof Variable) && !((split1 instanceof Num)||(split1 instanceof Variable))){
-            return "(" +split1.toString() + ")/" + split2.toString();
-        }
-        if((split1 instanceof Num || split1 instanceof Variable) && ((split2 instanceof Num)||(split2 instanceof Variable)))
-            return split1.toString() + "/" + split2.toString();
-        return "("+split1.toString()+")/("+split2.toString()+")";
+        return "("+ split1_toString + ")/(" + split2_toString + ")";
     }
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Splitting(split1, split2);
+        return this;
     }
 
     @Override
@@ -58,15 +65,8 @@ public class Splitting extends Expression{
 
 
     @Override
-    public double calculation(double num) throws MyException {
-        HashSet<Variable> v = count_variable();
-        if(v.size() > 1){
-            throw new MyException("Больше, чем одна переменная");
-        }
-        if(split2.calculation(num) == 0.0){
-            throw new MyException("Знаменатель равен нулю");
-        }
-        else return (split1.calculation(num) / split2.calculation(num));
+    public double calculation(double num) {
+        return (split1.calculation(num) / split2.calculation(num));
     }
 
     @Override
