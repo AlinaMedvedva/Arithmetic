@@ -11,14 +11,20 @@ public class Exp extends Expression{
 
     @Override
     public String toString() {
-        if(pow instanceof Num || pow instanceof Variable)
-            return "e^" + pow.toString();
-        return "e^(" + pow.toString()+")";
+        String pow_toString = pow.toString();
+        if(this.isDouble(pow_toString))
+        {
+            double p = Double.parseDouble(pow_toString);
+            if(p == 0.0)
+                return "1";
+            return String.valueOf(Math.exp(p));
+        }
+        return "e^("+ pow_toString + ")";
     }
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Exp(pow);
+        return this;
     }
 
     @Override
@@ -27,7 +33,7 @@ public class Exp extends Expression{
     }
 
     @Override
-    public double calculation(double num) throws MyException {
+    public double calculation(double num) {
         return Math.exp(pow.calculation(num));
     }
 
