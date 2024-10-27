@@ -13,12 +13,39 @@ public class Minus extends Expression{
 
     @Override
     public String toString() {
-        return minus1.toString() + " - " + minus2.toString();
+        String minus1_toString = minus1.toString();
+        String minus2_toString = minus2.toString();
+        boolean flag1 = false, flag2 = false;
+        if(minus2_toString.equals(minus1_toString))
+            return "0";
+        flag1 = this.isDouble(minus1_toString);
+        flag2 = this.isDouble(minus2_toString);
+        if(flag1 && flag2)
+        {
+            double m1 = Double.parseDouble(minus1_toString);
+            double m2 = Double.parseDouble(minus2_toString);
+            if(m1 - m2 == 0.0)
+                return "0";
+            return String.valueOf(m1 - m2);
+        }
+        if(flag1){
+            double m1 = Double.parseDouble(minus1_toString);
+            if(m1 == 0.0)
+                return "-" + minus2_toString;
+            return m1 + " - " + minus2_toString;
+        }
+        if(flag2){
+            double m2 = Double.parseDouble(minus2_toString);
+            if(m2 == 0)
+                return minus1_toString;
+            return minus1_toString + " - " +m2;
+        }
+        return minus1_toString + " - " + minus2_toString;
     }
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Minus(minus1, minus2);
+        return this;
     }
 
 
@@ -50,12 +77,8 @@ public class Minus extends Expression{
     }
 
     @Override
-    public double calculation(double num) throws MyException {
-        HashSet<Variable> v = count_variable();
-        if(v.size() > 1){
-            throw new MyException("Больше, чем одна переменная");
-        }
-        else return minus1.calculation(num) - minus2.calculation(num);
+    public double calculation(double num){
+        return minus1.calculation(num) - minus2.calculation(num);
     }
 
     @Override
