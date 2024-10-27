@@ -29,12 +29,16 @@ public class Multiplication extends Expression{
             double m1 = Double.parseDouble(mult1_toString);
             if(m1 == 0.0)
                 return "0";
+            if(m1 == 1.0)
+                return mult2_toString;
             return m1 + "*(" + mult2_toString + ")";
         }
         if(flag2){
             double m2 = Double.parseDouble(mult2_toString);
             if(m2 == 0.0)
                 return "0";
+            if(m2 == 1.0)
+                return mult1_toString;
             return m2 + "*(" + mult1_toString + ")";
         }
         return "("+mult1_toString+")*("+mult2_toString+")";
