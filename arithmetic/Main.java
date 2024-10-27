@@ -4,50 +4,47 @@ import java.util.HashSet;
 
 public class Main {
     public static void main(String []args) {
-
         //Введём две переменные и одно число
         Variable x = new Variable("x");
         Variable y = new Variable("y");
         Num two = new Num(2);
 
         //x + 2
-        Sum s = new Sum(x, two);
+        Expression s = x.add(two);
 
         //y - 2
-        Minus m = new Minus(y, two);
+        Expression m = y.difference(two);
 
         //(x+2)^(y-2)
-        Pow pow = new Pow(s, m);
+        Expression pow = s.pow(m);
 
         //(y-2)/(x+2)
-        Splitting split = new Splitting(m,s);
+        Expression split = m.div(s);
 
-        System.out.println("sum = " + s.toString());
-        System.out.println("minus = " + m.toString());
-        System.out.println("pow = " + pow.toString());
-        System.out.println("split = " + split.toString());
+        System.out.println("sum = " + s);
+        System.out.println("minus = " + m);
+        System.out.println("pow = " + pow);
+        System.out.println("split = " + split);
 
         //создаём копию разности
         try {
             Expression copy = m.clone();
+            System.out.println("Копия minus = " + copy);
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Копия minus = " + m.toString());
 
 
         //Производная от pow по y
         Expression derivate = pow.derivative("y");
-        System.out.println(derivate.toString());
-        //TODO
+        System.out.println("derivate pow dy = " + derivate.toString());
 
         //вычисляем значение суммы
         try {
             double n = 1.0;
-            double result = s.calculation(n);
-            System.out.println(s.toString() + " = " + result + ", x = " + n);
+            double result = s.calculate_expression(n);
+            System.out.println(s + " = " + result + ", x = " + n);
         } catch (MyException e) {
-
             System.out.println(e.getMessage());
         }
 
@@ -55,6 +52,6 @@ public class Main {
         System.out.println("Var = " + var_pow);
 
         Expression calculate = split.calculation("y", 2.0);
-        System.out.println("Expression split,  y = 2.0 : = " + calculate.toString());
+        System.out.println("Expression split, y = 2.0 : = " + calculate);
     }
 }
