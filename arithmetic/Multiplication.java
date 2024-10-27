@@ -13,20 +13,36 @@ public class Multiplication extends Expression{
 
     @Override
     public String toString() {
-        if((mult1 instanceof Num || mult1 instanceof Variable) && !((mult2 instanceof Num)||(mult2 instanceof Variable))){
-            return mult1.toString() + "*(" + mult2.toString() + ")";
+        String mult1_toString = mult1.toString();
+        String mult2_toString = mult2.toString();
+        boolean flag1 = false, flag2 = false;
+        flag1 = this.isDouble(mult1_toString);
+        flag2 = this.isDouble(mult2_toString);
+        if(flag1 && flag2){
+            double m1 = Double.parseDouble(mult1_toString);
+            double m2 = Double.parseDouble(mult2_toString);
+            if(m1*m2 == 0.0)
+                return "0";
+            return String.valueOf(m1*m2);
         }
-        if((mult2 instanceof Num || mult2 instanceof Variable) && !((mult1 instanceof Num)||(mult1 instanceof Variable))){
-            return "(" +mult1.toString() + ")*" + mult2.toString();
+        if(flag1){
+            double m1 = Double.parseDouble(mult1_toString);
+            if(m1 == 0.0)
+                return "0";
+            return m1 + "*(" + mult2_toString + ")";
         }
-        if((mult1 instanceof Num || mult1 instanceof Variable) && ((mult2 instanceof Num)||(mult2 instanceof Variable)))
-            return mult1.toString() + "*" + mult2.toString();
-        return "("+mult1.toString()+")*("+mult2.toString()+")";
+        if(flag2){
+            double m2 = Double.parseDouble(mult2_toString);
+            if(m2 == 0.0)
+                return "0";
+            return m2 + "*(" + mult1_toString + ")";
+        }
+        return "("+mult1_toString+")*("+mult2_toString+")";
     }
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Multiplication(mult1, mult2);
+        return this;
     }
 
     @Override
@@ -57,12 +73,8 @@ public class Multiplication extends Expression{
     }
 
     @Override
-    public double calculation(double num) throws MyException {
-        HashSet<Variable> v = count_variable();
-        if(v.size() > 1){
-            throw new MyException("Больше, чем одна переменная");
-        }
-        else return mult1.calculation(num) * mult2.calculation(num);
+    public double calculation(double num){
+        return mult1.calculation(num) * mult2.calculation(num);
     }
 
     @Override
