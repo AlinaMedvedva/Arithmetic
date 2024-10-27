@@ -12,12 +12,18 @@ public class Ln extends Expression{
 
     @Override
     public String toString() {
-        return "ln(" + e.toString() + ")";
+        String e_toString = e.toString();
+        if(this.isDouble(e_toString)) {
+            double p = Double.parseDouble(e_toString);
+            if(p == 1.0)
+                return "0";
+        }
+        return "ln(" + e_toString + ")";
     }
 
     @Override
     protected Expression clone() throws CloneNotSupportedException {
-        return new Ln(e);
+        return this;
     }
 
     @Override
@@ -40,12 +46,8 @@ public class Ln extends Expression{
     }
 
     @Override
-    public double calculation(double num) throws MyException {
-        HashSet<Variable> v = count_variable();
-        if(v.size() > 1){
-            throw new MyException("Больше, чем одна переменная");
-        }
-        else return Math.log(e.calculation(num));
+    public double calculation(double num) {
+        return Math.log(e.calculation(num));
     }
 
     @Override
